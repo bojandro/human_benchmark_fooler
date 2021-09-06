@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 import time
 
 
@@ -33,9 +34,11 @@ def fool_memorize_the_sequence():
 
     driver = webdriver.Firefox()
     driver.get(url)
+    print('Connection established!')
 
     time.sleep(1)
 
+    print('Starting benchmark!')
     field = driver.find_element_by_class_name('css-de05nr')
     field.click()
 
@@ -49,18 +52,19 @@ def fool_memorize_the_sequence():
             try:
                 curr_square = squares.find_element_by_class_name('active')
                 sequence.append(curr_square)
-                print('Detected active square!')
+                print(f'Detected active square {len(sequence)} {curr_square}!')
                 time.sleep(0.5)
-            except Exception as e:
-                print(e)
-
-        time.sleep(2)
+            except NoSuchElementException:
+                pass
 
         print('Reproducing the sequence')
+
+        time.sleep(1)
+
         for el in sequence:
             el.click()
-        sequence_global = sequence
-        sequence = []
+
+        sequence_global.append(sequence[-1])
 
 
 def fool_aim_trainer():
@@ -83,6 +87,6 @@ def fool_aim_trainer():
 
 
 if __name__ == '__main__':
-    fool_reaction_time()
-    # fool_memorize_the_sequence()
+    # fool_reaction_time()
+    fool_memorize_the_sequence()
     # fool_aim_trainer()
