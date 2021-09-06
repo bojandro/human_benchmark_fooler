@@ -1,0 +1,1 @@
+I'm here to ensure that 'result' folder is created.
