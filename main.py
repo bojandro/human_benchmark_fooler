@@ -90,13 +90,9 @@ def fool_aim_trainer(driver: webdriver):
     for i in range(30):
         driver.find_element_by_xpath('/html/body/div[1]/div/div[4]/div[1]/div/div[1]/div/div/div/div[6]').click()
 
-    driver.save_screenshot(f'results/aim_trainer/result-{datetime.now()}.png')
-
-    driver.close()
-
 
 if __name__ == '__main__':
-    # fooler_hof(fool_reaction_time)()
-    # fooler_hof(fool_memorize_the_sequence)()
-    # fooler_hof(fool_aim_trainer)()
+    fooler_hof(fool_reaction_time)()
+    fooler_hof(fool_aim_trainer)()
+    fooler_hof(fool_memorize_the_sequence)()
     pass
