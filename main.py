@@ -11,6 +11,7 @@ URLS = {
     'fool_memorize_the_sequence': r'https://humanbenchmark.com/tests/sequence',
     'fool_aim_trainer': r'https://humanbenchmark.com/tests/aim',
     'fool_number_memory': r'https://humanbenchmark.com/tests/number-memory',
+    'fool_verbal_memory_test': r'https://humanbenchmark.com/tests/verbal-memory',
     'fool_chimp_test': r'https://humanbenchmark.com/tests/chimp'
 }
 
@@ -43,7 +44,8 @@ def fooler_hof(func, goal: int = 10):
 
         # Close tab
         driver.close()
-    return wrapper
+    wrapper()
+    print('Finished test!')
 
 
 def fool_reaction_time(driver: webdriver, goal):
@@ -114,7 +116,27 @@ def fool_number_memory(driver: webdriver, goal):
         time_counter += 0.8
 
 
-def fool_chimp_test(driver, goal):
+def fool_verbal_memory_test(driver: webdriver, goal):
+    time.sleep(1)
+    start_button = driver.find_element_by_class_name('css-de05nr.e19owgy710')
+    start_button.click()
+
+    seen_button = driver.find_element_by_css_selector('button.css-de05nr:nth-child(1)')
+    new_button = driver.find_element_by_css_selector('button.css-de05nr:nth-child(3)')
+
+    encountered_words = []
+
+    for _ in range(goal):
+        word = driver.find_element_by_class_name('word').text
+
+        if word in encountered_words:
+            seen_button.click()
+        else:
+            encountered_words.append(word)
+            new_button.click()
+
+
+def fool_chimp_test(driver: webdriver, goal):
     number_of_blocks = 4
 
     for _ in range(goal - number_of_blocks):
@@ -129,8 +151,9 @@ def fool_chimp_test(driver, goal):
 
 
 if __name__ == '__main__':
-    fooler_hof(fool_reaction_time, 7)()
-    fooler_hof(fool_aim_trainer, 7)()
-    fooler_hof(fool_memorize_the_sequence, 7)()
-    fooler_hof(fool_number_memory, 7)()
-    fooler_hof(fool_chimp_test, 7)()
+    fooler_hof(fool_reaction_time, 7)
+    fooler_hof(fool_aim_trainer, 7)
+    fooler_hof(fool_memorize_the_sequence, 7)
+    fooler_hof(fool_number_memory, 7)
+    fooler_hof(fool_verbal_memory_test, 100)
+    fooler_hof(fool_chimp_test, 7)
