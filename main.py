@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.keys import Keys
 import time
 from datetime import datetime
 import os
@@ -8,7 +9,8 @@ import os
 URLS = {
     'fool_reaction_time': r'https://humanbenchmark.com/tests/reactiontime',
     'fool_memorize_the_sequence': r'https://humanbenchmark.com/tests/sequence',
-    'fool_aim_trainer': r'https://humanbenchmark.com/tests/aim'
+    'fool_aim_trainer': r'https://humanbenchmark.com/tests/aim',
+    'fool_number_memory': r'https://humanbenchmark.com/tests/number-memory'
 }
 
 
@@ -91,8 +93,27 @@ def fool_aim_trainer(driver: webdriver):
         driver.find_element_by_xpath('/html/body/div[1]/div/div[4]/div[1]/div/div[1]/div/div/div/div[6]').click()
 
 
+def fool_number_memory(driver: webdriver):
+    time_counter = 2.0
+
+    while True:
+        start_button = driver.find_element_by_class_name('css-de05nr.e19owgy710')
+        start_button.click()
+
+        num = driver.find_element_by_class_name('big-number').text
+
+        time.sleep(time_counter)
+
+        input_field = driver.find_element_by_xpath('/html/body/div[1]/div/div[4]/div[1]/div/div/div/form/div[2]/input')
+        input_field.send_keys(num)
+        input_field.submit()
+
+        time_counter += 0.8
+
+
 if __name__ == '__main__':
-    fooler_hof(fool_reaction_time)()
-    fooler_hof(fool_aim_trainer)()
-    fooler_hof(fool_memorize_the_sequence)()
+    # fooler_hof(fool_reaction_time)()
+    # fooler_hof(fool_aim_trainer)()
+    # fooler_hof(fool_memorize_the_sequence)()
+    # fooler_hof(fool_number_memory)()
     pass
