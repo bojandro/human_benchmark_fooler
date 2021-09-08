@@ -1,27 +1,30 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.common.keys import Keys
 import time
 from datetime import datetime
 import os
 
-
+# Urls for the tests
 URLS = {
-    'fool_reaction_time': r'https://humanbenchmark.com/tests/reactiontime',
-    'fool_memorize_the_sequence': r'https://humanbenchmark.com/tests/sequence',
+    'fool_reaction_time_test': r'https://humanbenchmark.com/tests/reactiontime',
+    'fool_sequence_memory_test': r'https://humanbenchmark.com/tests/sequence',
     'fool_aim_trainer': r'https://humanbenchmark.com/tests/aim',
-    'fool_number_memory': r'https://humanbenchmark.com/tests/number-memory',
+    'fool_number_memory_test': r'https://humanbenchmark.com/tests/number-memory',
     'fool_verbal_memory_test': r'https://humanbenchmark.com/tests/verbal-memory',
-    'fool_chimp_test': r'https://humanbenchmark.com/tests/chimp'
+    'fool_chimp_test': r'https://humanbenchmark.com/tests/chimp',
+    'fool_visual_memory_test': r'https://humanbenchmark.com/tests/memory',
+    'fool_typing_test': r'https://humanbenchmark.com/tests/typing'
 }
 
 
+# Service function to create missing directories for a screenshots
 def check_and_create_dir(path: str):
     if not os.path.isdir(path):
         os.mkdir(path)
     return
 
 
+# Higher order function to avoid writing repeating code
 def fooler_hof(func, goal: int = 10):
     def wrapper(*args, **kwargs):
         global URLS
@@ -44,11 +47,12 @@ def fooler_hof(func, goal: int = 10):
 
         # Close tab
         driver.close()
+
     wrapper()
     print('Finished test!')
 
 
-def fool_reaction_time(driver: webdriver, goal):
+def fool_reaction_time_test(driver: webdriver, goal: int):
     number_of_shots = 5
     field = driver.find_element_by_class_name('view-splash')
 
@@ -61,7 +65,7 @@ def fool_reaction_time(driver: webdriver, goal):
                 break
 
 
-def fool_memorize_the_sequence(driver: webdriver, goal):
+def fool_sequence_memory_test(driver: webdriver, goal: int):
     field = driver.find_element_by_class_name('css-de05nr')
     field.click()
 
@@ -89,7 +93,7 @@ def fool_memorize_the_sequence(driver: webdriver, goal):
         sequence_global_len += 1
 
 
-def fool_aim_trainer(driver: webdriver, goal):
+def fool_aim_trainer(driver: webdriver, goal: int):
     number_of_shots = 30
     field = driver.find_element_by_css_selector('.css-1k4dpwl')
     field.click()
@@ -98,7 +102,7 @@ def fool_aim_trainer(driver: webdriver, goal):
         driver.find_element_by_xpath('/html/body/div[1]/div/div[4]/div[1]/div/div[1]/div/div/div/div[6]').click()
 
 
-def fool_number_memory(driver: webdriver, goal):
+def fool_number_memory_test(driver: webdriver, goal: int):
     time_counter = 2.0
 
     for _ in range(goal):
@@ -116,7 +120,7 @@ def fool_number_memory(driver: webdriver, goal):
         time_counter += 0.8
 
 
-def fool_verbal_memory_test(driver: webdriver, goal):
+def fool_verbal_memory_test(driver: webdriver, goal: int):
     time.sleep(1)
     start_button = driver.find_element_by_class_name('css-de05nr.e19owgy710')
     start_button.click()
@@ -136,7 +140,7 @@ def fool_verbal_memory_test(driver: webdriver, goal):
             new_button.click()
 
 
-def fool_chimp_test(driver: webdriver, goal):
+def fool_chimp_test(driver: webdriver, goal: int):
     number_of_blocks = 4
 
     for _ in range(goal - number_of_blocks):
@@ -150,10 +154,37 @@ def fool_chimp_test(driver: webdriver, goal):
         number_of_blocks += 1
 
 
+def fool_visual_memory_test(driver: webdriver, goal: int):
+    time.sleep(1)
+    start_button = driver.find_element_by_class_name('css-de05nr.e19owgy710')
+    start_button.click()
+
+    for _ in range(goal):
+        active_blocks = driver.find_elements_by_class_name('active.css-lxtdud.eut2yre1')
+
+        time.sleep(1.5)
+
+        for block in active_blocks:
+            block.click()
+
+        time.sleep(2)
+
+
+def fool_typing_test(driver: webdriver, goal: int):
+    text_field = driver.find_element_by_class_name('letters.notranslate')
+    paragraph = text_field.text
+
+    text_field.send_keys(paragraph)
+
+    time.sleep(1)
+
+
 if __name__ == '__main__':
-    fooler_hof(fool_reaction_time, 7)
-    fooler_hof(fool_aim_trainer, 7)
-    fooler_hof(fool_memorize_the_sequence, 7)
-    fooler_hof(fool_number_memory, 7)
+    fooler_hof(fool_reaction_time_test)
+    fooler_hof(fool_sequence_memory_test, 10)
+    fooler_hof(fool_aim_trainer)
+    fooler_hof(fool_number_memory_test, 7)
     fooler_hof(fool_verbal_memory_test, 100)
-    fooler_hof(fool_chimp_test, 7)
+    fooler_hof(fool_chimp_test, 10)
+    fooler_hof(fool_visual_memory_test, 8)
+    fooler_hof(fool_typing_test)
