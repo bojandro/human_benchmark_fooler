@@ -145,11 +145,12 @@ def fool_verbal_memory_test(driver: webdriver, goal: int):
 
     seen_button = driver.find_element_by_css_selector(SEEN_BUTTON_CLASS_NAME)
     new_button = driver.find_element_by_css_selector(NEW_BUTTON_CLASS_NAME)
+    word_field = driver.find_element_by_class_name(WORD_FIELD_CLASS_NAME)
 
     encountered_words = []
 
     for _ in range(goal):
-        word = driver.find_element_by_class_name(WORD_FIELD_CLASS_NAME).text
+        word = word_field.text
 
         if word in encountered_words:
             seen_button.click()
@@ -199,11 +200,11 @@ def fool_typing_test(driver: webdriver, goal: int):
 
 
 if __name__ == '__main__':
-    fooler_hof(fool_reaction_time_test)
-    fooler_hof(fool_sequence_memory_test, 10)
-    fooler_hof(fool_aim_trainer)
-    fooler_hof(fool_number_memory_test, 7)
+    # fooler_hof(fool_reaction_time_test)
+    # fooler_hof(fool_sequence_memory_test, 10)
+    # fooler_hof(fool_aim_trainer)
+    # fooler_hof(fool_number_memory_test, 7)
     fooler_hof(fool_verbal_memory_test, 100)
-    fooler_hof(fool_chimp_test, 10)
-    fooler_hof(fool_visual_memory_test, 8)
-    fooler_hof(fool_typing_test)
+    # fooler_hof(fool_chimp_test, 10)
+    # fooler_hof(fool_visual_memory_test, 8)
+    # fooler_hof(fool_typing_test)
