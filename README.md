@@ -44,7 +44,7 @@ Run scripts.
 
 <br>
 
-Some tests are theoretically infinite (like sequence memory one), so functions that are fooling those test have `goal` parameter.
+Some tests are theoretically infinite (like the sequence memory one), so functions that are fooling those test have `goal` parameter.
 
 Function call example is available in `main.py` file.
 ```python

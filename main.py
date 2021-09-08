@@ -26,29 +26,27 @@ def check_and_create_dir(path: str):
 
 # Higher order function to avoid writing repeating code
 def fooler_hof(func, goal: int = 10):
-    def wrapper(*args, **kwargs):
-        global URLS
+    global URLS
 
-        # Print in terminal
-        func_name = func.__name__
-        print(f'Starting {func_name}!')
+    # Print in terminal
+    func_name = func.__name__
+    print(f'Starting {func_name}!')
 
-        # Initialize webdriver
-        driver = webdriver.Firefox()
-        driver.get(URLS[func_name])
+    # Initialize webdriver
+    driver = webdriver.Firefox()
+    driver.get(URLS[func_name])
 
-        # Call a function
-        func(driver, goal)
+    # Call a function
+    func(driver, goal)
 
-        # Save screenshot
-        path = f'results/{func_name}'
-        check_and_create_dir(path)
-        driver.save_screenshot(os.path.join(path, f'result-{datetime.now()}.png'))
+    # Save screenshot
+    path = f'results/{func_name}'
+    check_and_create_dir(path)
+    driver.save_screenshot(os.path.join(path, f'result-{datetime.now()}.png'))
 
-        # Close tab
-        driver.close()
+    # Close tab
+    driver.close()
 
-    wrapper()
     print('Finished test!')
 
 
