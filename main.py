@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
-import time
 from datetime import datetime
+import time
 import os
 
 # Urls for the tests
@@ -16,6 +16,23 @@ URLS = {
     'fool_typing_test': r'https://humanbenchmark.com/tests/typing'
 }
 
+# CSS search parameters
+FIELD_START_CLASS_NAME = 'view-splash'
+FIELD_GO_CLASS_NAME = 'view-go'
+
+SQUARES_CLASS_NAME = 'squares'
+ACTIVE_SQUARE_CLASS_NAME = 'active'
+
+NUMBER_FIELD_CLASS_NAME = 'big-number'
+INPUT_FIELD_XPATH = '/html/body/div[1]/div/div[4]/div[1]/div/div/div/form/div[2]/input'
+WORD_FIELD_CLASS_NAME = 'word'
+TEXT_FIELD_CLASS_NAME = 'letters.notranslate'
+ACTIVE_BLOCK_CLASS_NAME = 'active.css-lxtdud.eut2yre1'
+
+START_BUTTON_CLASS_NAME = 'css-de05nr.e19owgy710'
+SEEN_BUTTON_CLASS_NAME = 'button.css-de05nr:nth-child(1)'
+NEW_BUTTON_CLASS_NAME = 'button.css-de05nr:nth-child(3)'
+
 
 # Service function to create missing directories for a screenshots
 def check_and_create_dir(path: str):
@@ -24,7 +41,7 @@ def check_and_create_dir(path: str):
     return
 
 
-# Higher order function to avoid writing repeating code
+# Higher Order Function (HOF) to avoid writing repeating code
 def fooler_hof(func, goal: int = 10):
     global URLS
 
@@ -40,9 +57,10 @@ def fooler_hof(func, goal: int = 10):
     func(driver, goal)
 
     # Save screenshot
-    path = f'results/{func_name}'
-    check_and_create_dir(path)
-    driver.save_screenshot(os.path.join(path, f'result-{datetime.now()}.png'))
+    results_path = os.path.join('results', func_name)
+    check_and_create_dir(results_path)
+    filename = os.path.join(results_path, f'result-{datetime.now()}.png')
+    driver.save_screenshot(filename)
 
     # Close tab
     driver.close()
@@ -52,31 +70,32 @@ def fooler_hof(func, goal: int = 10):
 
 def fool_reaction_time_test(driver: webdriver, goal: int):
     number_of_shots = 5
-    field = driver.find_element_by_class_name('view-splash')
+    field = driver.find_element_by_class_name(FIELD_START_CLASS_NAME)
 
     for i in range(number_of_shots):
         field.click()
 
         while True:
-            if 'view-go' in field.get_attribute('class'):
+            if FIELD_GO_CLASS_NAME in field.get_attribute('class'):
                 field.click()
                 break
 
 
 def fool_sequence_memory_test(driver: webdriver, goal: int):
-    field = driver.find_element_by_class_name('css-de05nr')
+    field = driver.find_element_by_class_name(START_BUTTON_CLASS_NAME)
     field.click()
 
-    squares = driver.find_element_by_class_name('squares')
+    squares = driver.find_element_by_class_name(SQUARES_CLASS_NAME)
     sequence_global_len = 0
 
     for _ in range(goal):
         sequence = []
         while sequence_global_len >= len(sequence):
             try:
-                curr_square = squares.find_element_by_class_name('active')
+                curr_square = squares.find_element_by_class_name(ACTIVE_SQUARE_CLASS_NAME)
                 sequence.append(curr_square)
                 print(f'Detected active square {len(sequence)} {curr_square}!')
+
                 time.sleep(0.5)
             except NoSuchElementException:
                 pass
@@ -104,14 +123,14 @@ def fool_number_memory_test(driver: webdriver, goal: int):
     time_counter = 2.0
 
     for _ in range(goal):
-        start_button = driver.find_element_by_class_name('css-de05nr.e19owgy710')
+        start_button = driver.find_element_by_class_name(START_BUTTON_CLASS_NAME)
         start_button.click()
 
-        num = driver.find_element_by_class_name('big-number').text
+        num = driver.find_element_by_class_name(NUMBER_FIELD_CLASS_NAME).text
 
         time.sleep(time_counter)
 
-        input_field = driver.find_element_by_xpath('/html/body/div[1]/div/div[4]/div[1]/div/div/div/form/div[2]/input')
+        input_field = driver.find_element_by_xpath(INPUT_FIELD_XPATH)
         input_field.send_keys(num)
         input_field.submit()
 
@@ -120,16 +139,17 @@ def fool_number_memory_test(driver: webdriver, goal: int):
 
 def fool_verbal_memory_test(driver: webdriver, goal: int):
     time.sleep(1)
-    start_button = driver.find_element_by_class_name('css-de05nr.e19owgy710')
+
+    start_button = driver.find_element_by_class_name(START_BUTTON_CLASS_NAME)
     start_button.click()
 
-    seen_button = driver.find_element_by_css_selector('button.css-de05nr:nth-child(1)')
-    new_button = driver.find_element_by_css_selector('button.css-de05nr:nth-child(3)')
+    seen_button = driver.find_element_by_css_selector(SEEN_BUTTON_CLASS_NAME)
+    new_button = driver.find_element_by_css_selector(NEW_BUTTON_CLASS_NAME)
 
     encountered_words = []
 
     for _ in range(goal):
-        word = driver.find_element_by_class_name('word').text
+        word = driver.find_element_by_class_name(WORD_FIELD_CLASS_NAME).text
 
         if word in encountered_words:
             seen_button.click()
@@ -142,7 +162,7 @@ def fool_chimp_test(driver: webdriver, goal: int):
     number_of_blocks = 4
 
     for _ in range(goal - number_of_blocks):
-        start_button = driver.find_element_by_class_name('css-de05nr.e19owgy710')
+        start_button = driver.find_element_by_class_name(START_BUTTON_CLASS_NAME)
         start_button.click()
 
         for i in range(number_of_blocks):
@@ -154,11 +174,12 @@ def fool_chimp_test(driver: webdriver, goal: int):
 
 def fool_visual_memory_test(driver: webdriver, goal: int):
     time.sleep(1)
-    start_button = driver.find_element_by_class_name('css-de05nr.e19owgy710')
+
+    start_button = driver.find_element_by_class_name(START_BUTTON_CLASS_NAME)
     start_button.click()
 
     for _ in range(goal):
-        active_blocks = driver.find_elements_by_class_name('active.css-lxtdud.eut2yre1')
+        active_blocks = driver.find_elements_by_class_name(ACTIVE_BLOCK_CLASS_NAME)
 
         time.sleep(1.5)
 
@@ -169,7 +190,7 @@ def fool_visual_memory_test(driver: webdriver, goal: int):
 
 
 def fool_typing_test(driver: webdriver, goal: int):
-    text_field = driver.find_element_by_class_name('letters.notranslate')
+    text_field = driver.find_element_by_class_name(TEXT_FIELD_CLASS_NAME)
     paragraph = text_field.text
 
     text_field.send_keys(paragraph)
