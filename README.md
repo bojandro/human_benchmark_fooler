@@ -4,7 +4,7 @@
 
 ## Summary
 
-A set of `Python` scripts with `Selenium` to surpass human limits in accomplishing simple tasks available on <a href='https://humanbenchmark.com/'> https://humanbenchmark.com/. </a>
+A set of `Python` scripts with `Selenium` designed to surpass human limits in accomplishing simple tasks available on <a href='https://humanbenchmark.com/'> https://humanbenchmark.com/. </a>
 
 <br>
 
@@ -40,6 +40,17 @@ Install requirements.
 Run scripts.
 ```shell
 (env) .../human_benchmark_fooler$ python3 main.py
+```
+
+<br>
+
+Some tests are theoretically infinite (like sequence memory one), so functions that are fooling those test have `goal` parameter.
+
+Function call example is available in `main.py` file.
+```python
+if __name__ == '__main__':
+    fooler_hof(fool_reaction_time_test)
+    fooler_hof(fool_sequence_memory_test, 10)
 ```
 
 <br>
